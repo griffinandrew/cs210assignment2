@@ -114,6 +114,15 @@ _Bool read_sequence(char s[], int seq_len) {
 
     // Loop until new line 
     // FIXME: ADD your loop here
+    while(b != '\n' && i <= seq_len){
+      if (b == 'A' || b == 'T' || b == 'C' || b == 'G'){
+        s[i] == b;
+        i++;
+      }
+      else{
+        continue;
+      }
+    }
 
 
     // When we are done looping i should hold the length of valid bases read
