@@ -120,6 +120,7 @@ _Bool read_sequence(char s[], int seq_len) {
         i++;
       }
       else{
+        i++;
         continue;
       }
     }
