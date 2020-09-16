@@ -115,7 +115,7 @@ _Bool read_sequence(char s[], int seq_len) {
     // Loop until new line 
     // FIXME: ADD your loop here
     while(b != '\n' && i <= seq_len){
-      if (b == 'A' || b == 'T' || b == 'C' || b == 'G'){
+      if (b == 'A' || b == 'T' || b == 'C' || b == 'G'){ // or is_valid_base == true;
         s[i] == b;
         i++;
       }
@@ -142,7 +142,9 @@ _Bool read_sequence(char s[], int seq_len) {
  ****************************************************************************/
 _Bool is_valid_base(char b) {
   // FIXME: Add a loop here that compares the input b to elements of the bases array
-
+    if (b == 'A' || b == 'T' || b == 'C' || b == 'G'){ //wait why do i need a loop???
+      return 1; 
+    }
 
 
   // if we got here then we must not have matched any of the bases elements
@@ -228,6 +230,23 @@ _Bool is_valid_base(char b) {
  ****************************************************************************/
 _Bool match(const char s1[], const char s2[],
      int len1, int len2, int threshold) {
+    int overlap = 0;
+    int len = len1;
+    while(threshold > overlap){
+      if(s1[len - threshold + overlap] == s2[len2 - threshold + overlap]){
+        overlap++;
+      }
+      else{
+        len = len1-1;
+      }
+    }
+    if(overlap == threshold){
+      printf("A match was found.");
+      print_sequence(s1,len1);
+      return 1;
+    }
+      
+    
    // FIXME:  This is where the real work has to happen 
    //         implement this function using print_sequence_part as needed
 
