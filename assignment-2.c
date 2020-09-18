@@ -50,14 +50,25 @@ int main() {
 
     
     // 1: Read base input sequence into s1 array
-    if(read_sequence(s1,20) == 0) {
+    if(read_sequence(s1,BASE_SEQ_LEN) == 0) {
       // if read_sequence returned false then there was an error
       printf("ERROR: sequence 1 is bad.  Exiting\n");
       return -1;
     }
-    if(read_sequence(s2,5) == 0){
+    if(read_sequence(s2,TARGET_SEQ_LEN) == 0){
       printf("ERROR: sequence 2 is bad.  Exiting\n");
+      return -1;
     }
+     if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 1){
+      printf("A match was found.\n");
+      print_sequence(s1,BASE_SEQ_LEN); 
+      return 0;
+    }
+    if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 0) {
+      printf("No match found.\n");
+      return 0;
+    }
+
    // }
     /*if(read_sequence(s2,5) == 0){
       printf("ERROR: sequence 2 is bad.  Exiting\n");
@@ -267,18 +278,19 @@ _Bool is_valid_base(char b) {
 _Bool match(const char s1[], const char s2[],
     int len1, int len2, int threshold) {
     int overlap = 0;
-    int len = len1;
+    int len = BASE_SEQ_LEN;
     while(threshold > overlap){
       if(s1[len - threshold + overlap] == s2[len2 - threshold + overlap]){
+        
         overlap++;
       }
       else{
-        len = len1-1;
+        len = len-1;
       }
     }
     if(overlap == threshold){
-      printf("A match was found.");
-      print_sequence(s1,len1);
+      //printf("A match was found.\n");
+      //print_sequence(s1,len1);
       return 1;
     }
       
@@ -286,6 +298,6 @@ _Bool match(const char s1[], const char s2[],
    // FIXME:  This is where the real work has to happen 
    //         implement this function using print_sequence_part as needed
 
-    printf("No match found.\n");
+    //printf("No match found.\n");
     return 0;
 }
