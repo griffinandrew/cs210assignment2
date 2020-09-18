@@ -47,14 +47,24 @@ const char bases[] = {'A', 'T', 'C', 'G'};
 int main() {
     char s1[20], s2[5];
 
+
+    
     // 1: Read base input sequence into s1 array
-    if (read_sequence(s1, 20) == 0) {
+    if(read_sequence(s1,20) == 0) {
       // if read_sequence returned false then there was an error
       printf("ERROR: sequence 1 is bad.  Exiting\n");
       return -1;
     }
     if(read_sequence(s1,20) == 1){
       printf("Valid input sequence: \n");
+    }
+    if(read_sequence(s2,5) == 0){
+      printf("ERROR: sequence 2 is bad.  Exiting\n");
+      return -1;
+    }
+    if (read_sequence(s2,5) == 1){
+      printf("Valid input sequence: \n");
+      
     }
     // FIXME: You need to finish the main function 
     // FIXME: 2: Read target input sequence into s2 array
@@ -114,17 +124,36 @@ _Bool read_sequence(char s[], int seq_len) {
     printf("Enter a sequence of length %d: ", seq_len);
     // Read first character in to get us started
     scanf("%c", &b);
-
-    // Loop until new line 
+    /*for (i; i < seq_len; i++){
+      scanf("%c", &b);
+      if(b != '\n'){
+        if(is_valid_base(b) == 1) {
+        s[i] == b;
+        }
+        else{
+          continue; //break;
+        }
+      
+      }
+      */
+    }
+    //Loop until new line 
     // FIXME: ADD your loop here
-    while(b != '\n' && i < seq_len){
-      if (b == 'A' || b == 'T' || b == 'C' || b == 'G'){ // or is_valid_base == true;
+   while(b != '\n'){
+      if (i < seq_len){
+        if (is_valid_base(b) == 1){ // or is_valid_base == true;
         s[i] == b;
         i++;
       }
-      else{
+      }
+      scanf("%c", &b);
+      if (is_valid_base(b) == 1){ // or is_valid_base == true;
+        s[i] == b;
         i++;
-        continue;
+      }
+    /  else{
+        //i++; //want to not skip over 
+       continue;
       }
     }
 
@@ -146,9 +175,17 @@ _Bool read_sequence(char s[], int seq_len) {
  ****************************************************************************/
 _Bool is_valid_base(char b) {
   // FIXME: Add a loop here that compares the input b to elements of the bases array
-    if (b == 'A' || b == 'T' || b == 'C' || b == 'G'){ //wait why do i need a loop???
-      return 1; 
+  for(int i = 0; i < 4; i++){
+    if(b == bases[i]){
+      return 1;
     }
+  }
+  
+  
+  
+  //if (b == 'A' || b == 'T' || b == 'C' || b == 'G'){ //wait why do i need a loop???
+    //return 1; 
+ // }
 
 
   // if we got here then we must not have matched any of the bases elements
