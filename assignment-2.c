@@ -55,10 +55,11 @@ int main() {
       printf("ERROR: sequence 1 is bad.  Exiting\n");
       return -1;
     }
-    if(read_sequence(s1,20) == 1){
-      printf("Valid input sequence: \n");
-    }
     if(read_sequence(s2,5) == 0){
+      printf("ERRO: sequence 2 is bad.  Exiting\n");
+
+   // }
+    /*if(read_sequence(s2,5) == 0){
       printf("ERROR: sequence 2 is bad.  Exiting\n");
       return -1;
     }
@@ -66,6 +67,7 @@ int main() {
       printf("Valid input sequence: \n");
       
     }
+    */
     // FIXME: You need to finish the main function 
     // FIXME: 2: Read target input sequence into s2 array
 
@@ -136,32 +138,25 @@ _Bool read_sequence(char s[], int seq_len) {
       
       }
       */
-    }
+    //}
     //Loop until new line 
     // FIXME: ADD your loop here
+
+
    while(b != '\n'){
-      if (i < seq_len){
-        if (is_valid_base(b) == 1){ // or is_valid_base == true;
+      if ((i < seq_len) && (is_valid_base(b) == 1)) {
         s[i] == b;
         i++;
-      }
       }
       scanf("%c", &b);
-      if (is_valid_base(b) == 1){ // or is_valid_base == true;
-        s[i] == b;
-        i++;
-      }
-    /  else{
-        //i++; //want to not skip over 
-       continue;
-      }
     }
+    
 
-
+    //printf("i is : %i ", i);
     // When we are done looping i should hold the length of valid bases read
-    if (i != (seq_len-1)) {
+    if(i != seq_len) {
       printf("Invalid: input sequence too short\n");
-       return 0; // sequence too short
+      return 0; // sequence too short
     }
     printf("Valid input sequence: ");
     print_sequence(s, seq_len);
@@ -175,7 +170,7 @@ _Bool read_sequence(char s[], int seq_len) {
  ****************************************************************************/
 _Bool is_valid_base(char b) {
   // FIXME: Add a loop here that compares the input b to elements of the bases array
-  for(int i = 0; i < 4; i++){
+  for(int i = 0; i < NUM_BASES; i++){
     if(b == bases[i]){
       return 1;
     }
