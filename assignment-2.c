@@ -53,6 +53,9 @@ int main() {
       printf("ERROR: sequence 1 is bad.  Exiting\n");
       return -1;
     }
+    if(read_sequence(s1,20) == 1){
+      printf("Valid input sequence: \n");
+    }
     // FIXME: You need to finish the main function 
     // FIXME: 2: Read target input sequence into s2 array
 
@@ -114,7 +117,7 @@ _Bool read_sequence(char s[], int seq_len) {
 
     // Loop until new line 
     // FIXME: ADD your loop here
-    while(b != '\n' && i <= seq_len){
+    while(b != '\n' && i < seq_len){
       if (b == 'A' || b == 'T' || b == 'C' || b == 'G'){ // or is_valid_base == true;
         s[i] == b;
         i++;
@@ -127,7 +130,7 @@ _Bool read_sequence(char s[], int seq_len) {
 
 
     // When we are done looping i should hold the length of valid bases read
-    if (i != seq_len) {
+    if (i != (seq_len-1)) {
       printf("Invalid: input sequence too short\n");
        return 0; // sequence too short
     }
@@ -230,7 +233,7 @@ _Bool is_valid_base(char b) {
  *                                                                          *
  ****************************************************************************/
 _Bool match(const char s1[], const char s2[],
-     int len1, int len2, int threshold) {
+    int len1, int len2, int threshold) {
     int overlap = 0;
     int len = len1;
     while(threshold > overlap){
