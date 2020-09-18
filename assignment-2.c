@@ -279,13 +279,14 @@ _Bool match(const char s1[], const char s2[],
     int len1, int len2, int threshold) {
     int overlap = 0;
     int len = BASE_SEQ_LEN;
-    while(threshold > overlap){
+    while(threshold >= overlap){
       if(s1[len - threshold + overlap] == s2[len2 - threshold + overlap]){
         
         overlap++;
       }
       else{
         len = len-1;
+        overlap = 0;
       }
     }
     if(overlap == threshold){
