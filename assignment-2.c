@@ -56,8 +56,8 @@ int main() {
       return -1;
     }
     if(read_sequence(s2,5) == 0){
-      printf("ERRO: sequence 2 is bad.  Exiting\n");
-
+      printf("ERROR: sequence 2 is bad.  Exiting\n");
+    }
    // }
     /*if(read_sequence(s2,5) == 0){
       printf("ERROR: sequence 2 is bad.  Exiting\n");
@@ -145,7 +145,7 @@ _Bool read_sequence(char s[], int seq_len) {
 
    while(b != '\n'){
       if ((i < seq_len) && (is_valid_base(b) == 1)) {
-        s[i] == b;
+        s[i] = b;
         i++;
       }
       scanf("%c", &b);
