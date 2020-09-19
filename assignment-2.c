@@ -59,9 +59,9 @@ int main() {
       printf("ERROR: sequence 2 is bad.  Exiting\n");
       return -1;
     }
-     if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 1){
+    if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 1){
       printf("A match was found.\n");
-      print_sequence(s1,BASE_SEQ_LEN); 
+      print_sequence_part(s1,0,BASE_SEQ_LEN-THRESHOLD); print_sequence_part(s2,0,5); 
       return 0;
     }
     if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 0) {
@@ -186,14 +186,6 @@ _Bool is_valid_base(char b) {
       return 1;
     }
   }
-  
-  
-  
-  //if (b == 'A' || b == 'T' || b == 'C' || b == 'G'){ //wait why do i need a loop???
-    //return 1; 
- // }
-
-
   // if we got here then we must not have matched any of the bases elements
   return 0;
 }
@@ -278,17 +270,33 @@ _Bool is_valid_base(char b) {
 _Bool match(const char s1[], const char s2[],
     int len1, int len2, int threshold) {
     int overlap = 0;
-    int len = BASE_SEQ_LEN;
+    int len = BASE_SEQ_LEN; 
+    int start = len - threshold -1;
+
+
     while(threshold >= overlap){
-      if(s1[len - threshold + overlap] == s2[len2 - threshold + overlap]){
-        
-        overlap++;
+      for (int i = 0; i < threshold; i++) {
+        if(s1[start + i] == s2[i]){
+          overlap++;
+          continue;
+        }
+        else{
+          break;
+        }
       }
-      else{
-        len = len-1;
-        overlap = 0;
+      if (overlap == threshold) {
+        return 1;
       }
+      
+      //need to catch case for prefix
+      start = start -1;
+      overlap =0;
+        //len = len-1;
+        //overlap = 0;
+      
     }
+    
+
     if(overlap == threshold){        // NEED TO ADD PREFIX CASE AND CONCATENATE
       //printf("A match was found.\n");
       //print_sequence(s1,len1);
