@@ -289,7 +289,7 @@ _Bool match(const char s1[], const char s2[],
         overlap = 0;
       }
     }
-    if(overlap == threshold){
+    if(overlap == threshold){        // NEED TO ADD PREFIX CASE AND CONCATENATE
       //printf("A match was found.\n");
       //print_sequence(s1,len1);
       return 1;
