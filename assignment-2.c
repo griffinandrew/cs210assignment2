@@ -272,15 +272,34 @@ _Bool match(const char s1[], const char s2[],
     int overlap = 0;
     int len = BASE_SEQ_LEN; 
     int start = len - threshold -1;
+    
 
 
-    while(threshold >= overlap){
-      for (int i = 0; i < threshold; i++) {
-        if(s1[start + i] == s2[i]){
-          overlap++;
-          continue;
+   //while(threshold >= overlap){  // or for len1-thres or len1- len2
+      for (int i = 0; i < len1; i++) {
+          overlap = i;
+          for(int x = 0; x < len2; x++) {
+            if(s1[x] == s2[overlap]){
+                overlap++;
+            }
+            else{
+              break;
+            }
+          }
+
+        
+          if (overlap == threshold) {
+            return 1;
+          }
+          
         }
+      
+
+
+
+        /*
         else{
+          //overlap = 0;
           break;
         }
       }
@@ -308,5 +327,7 @@ _Bool match(const char s1[], const char s2[],
    //         implement this function using print_sequence_part as needed
 
     //printf("No match found.\n");
+    */
     return 0;
-}
+//}
+    }
