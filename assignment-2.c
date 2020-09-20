@@ -60,8 +60,8 @@ int main() {
       return -1;
     }
     if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 1){
-      printf("A match was found.\n");
-      print_sequence_part(s1,0,BASE_SEQ_LEN-THRESHOLD); print_sequence_part(s2,0,5); 
+      //printf("A match was found.\n");
+      //print_sequence_part(s1,0,BASE_SEQ_LEN-THRESHOLD); print_sequence_part(s2,0,5); 
       return 0;
     }
     if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 0) {
@@ -292,19 +292,44 @@ _Bool match(const char s1[], const char s2[],
     }
   }
  */
+
+
+    for(int i = start; i >0; i--){
+      if(s1[i] == s2[0]){
+        if(s2[i+1] == s2[1]){
+          if(s2[i+2] == s2[2]) {
+            printf("A match was found.\n");
+            if (i == 17){
+              print_sequence_part(s1,0,17); print_sequence_part(s2,0,5);
+            }
+            else if ( i == 16) {
+              print_sequence_part(s1,0,16); print_sequence_part(s2,3,5);
+            }
+            else{
+              print_sequence(s1,len1);
+            }
+            return 1;
+          }
+        }
+      }
+    }
+
+    /*
     while(threshold >= overlap && !match_found){  // or for len1-thres or len1- len2
       if(s1[start + overlap] == s2[overlap]){
         overlap++;
         if(overlap == threshold) {  //maybe put in a switch case for the two cases, either prefix or in s1
           match_found = 1;
-          where_found =  (start) +overlap;
+          where_found =  (start-1)  - overlap;
         }
       }
       else{
-        //overlap = 0;          
+        overlap = 0;          
         start--;
       }
       if (match_found == 1){
+        //printf(where_found);
+        //print_sequence(s1,where_found);
         return 1;
       }
     }
@@ -315,7 +340,7 @@ _Bool match(const char s1[], const char s2[],
       //print_sequence(s1,len1);
       return 1;
     }
-      
+      */
     
    // FIXME:  This is where the real work has to happen 
    //         implement this function using print_sequence_part as needed
