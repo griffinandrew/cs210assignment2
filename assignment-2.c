@@ -230,23 +230,26 @@ _Bool is_valid_base(char b) {
  *  target sequence and the first 3 bases of the base sequence.             *
  *                                                                          *
  ****************************************************************************/
-_Bool match(const char s1[], const char s2[],
+_Bool match(const char s1[], const char s2[], //this function uses a backward traversal to test if a certain sequence is either contained or a prefix to a given array
     int len1, int len2, int threshold) {
     int start = len1 - threshold ;
 
-    for(int i = start; i >0; i--){ //want reverse loop so that start at end and move backwards(started this using a forward traversal and having overlap increment) I figured out that doesnt work because overlap == threshold would accidently trigger pass too early, because of the prefix for 3 it makes more sense to start at left and move that way
+    for(int i = start; i > 0; i--){ //want reverse loop so that start at end and move backwards(started this using a forward traversal and having overlap increment) I figured out that doesnt work because overlap == threshold would accidently trigger pass too early, because of the prefix for 3 it makes more sense to start at left and move that way
       if(s1[i] == s2[0]){
-        if(s2[i+1] == s2[1]){
-          if(s2[i+2] == s2[2]) { //checks if number found is within the threshold
+        if(s1[i+1] == s2[1]){
+          if(s1[i+2] == s2[2]) { //checks if number found is within the threshold
             printf("A match was found.\n");
             if (i == 17){
-              print_sequence_part(s1,0,17); print_sequence_part(s2,0,5); //if is a prefix print accordingly
+              print_sequence_part(s1,0,17); print_sequence_part(s2,0,5);
+              return 1; //if is a prefix print accordingly
             }
             else if ( i == 16) {
-              print_sequence_part(s1,0,16); print_sequence_part(s2,0,5); //if prefix print accordingly
+              print_sequence_part(s1,0,16); print_sequence_part(s2,0,5);
+              return 1; //if prefix print accordingly
             }
             else{
               print_sequence(s1,len1); //if in sequence (not at end) print sequence
+              return 1;
             }
             return 1;
           }
