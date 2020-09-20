@@ -270,49 +270,36 @@ _Bool is_valid_base(char b) {
 _Bool match(const char s1[], const char s2[],
     int len1, int len2, int threshold) {
     int overlap = 0;
-    int len = BASE_SEQ_LEN; 
-    int start = len - threshold -1;
-    
+    int start = len1 - threshold -1;
+    _Bool match_found; 
+    int where_found;
 
 
-   //while(threshold >= overlap){  // or for len1-thres or len1- len2
-      for (int i = 0; i < len1; i++) {
-          overlap = i;
-          for(int x = 0; x < len2; x++) {
-            if(s1[x] == s2[overlap]){
-                overlap++;
-            }
-            else{
-              break;
-            }
-          }
-
-        
-          if (overlap == threshold) {
-            return 1;
-          }
-          
-        }
-      
-
-
-
-        /*
-        else{
-          //overlap = 0;
-          break;
-        }
+  for (int i = 0; i< len1 && !match_found; i++){
+    if(s1[i] == s2[i]){
+      overlap++;
+      if(overlap == threshold){
+        match_found = 1;
+        where_found = i - len1;
       }
-      if (overlap == threshold) {
-        return 1;
+    }
+    else{
+      overlap = 0;
+    }
+    if(match_found == 1){
+      
+      return 1;
+    }
+  }
+ /*
+    while(threshold >= overlap){  // or for len1-thres or len1- len2
+      if(s1[start + overlap] == s2[overlap]){
+        overlap++;
       }
-      
-      //need to catch case for prefix
-      start = start -1;
-      overlap =0;
-        //len = len-1;
-        //overlap = 0;
-      
+      else{
+      //overlap = 0;          
+        start--;
+      }
     }
     
 
@@ -327,7 +314,8 @@ _Bool match(const char s1[], const char s2[],
    //         implement this function using print_sequence_part as needed
 
     //printf("No match found.\n");
+    
+    return 0;
     */
     return 0;
-//}
     }
