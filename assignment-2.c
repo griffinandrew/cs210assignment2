@@ -60,34 +60,12 @@ int main() {
       return -1;
     }
     if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 1){
-      //printf("A match was found.\n");
-      //print_sequence_part(s1,0,BASE_SEQ_LEN-THRESHOLD); print_sequence_part(s2,0,5); 
       return 0;
     }
     if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 0) {
       printf("No match found.\n");
       return 0;
     }
-
-   // }
-    /*if(read_sequence(s2,5) == 0){
-      printf("ERROR: sequence 2 is bad.  Exiting\n");
-      return -1;
-    }
-    if (read_sequence(s2,5) == 1){
-      printf("Valid input sequence: \n");
-      
-    }
-    */
-    // FIXME: You need to finish the main function 
-    // FIXME: 2: Read target input sequence into s2 array
-
-    // FIXME: 3: Call match function to look for match and print merged
-    // sequence if a match is found
-
-
-
-
     return 0;
 }
 
@@ -137,39 +115,24 @@ _Bool read_sequence(char s[], int seq_len) {
     printf("Enter a sequence of length %d: ", seq_len);
     // Read first character in to get us started
     scanf("%c", &b);
-    /*for (i; i < seq_len; i++){
-      scanf("%c", &b);
-      if(b != '\n'){
-        if(is_valid_base(b) == 1) {
-        s[i] == b;
-        }
-        else{
-          continue; //break;
-        }
-      
-      }
-      */
-    //}
-    //Loop until new line 
-    // FIXME: ADD your loop here
 
 
    while(b != '\n'){
-      if ((i < seq_len) && (is_valid_base(b) == 1)) {
+      if ((i < seq_len) && (is_valid_base(b) == 1)) { //while b is valid base sequence and noyt all bases have been checked verify that b is in fact a base and add it to appropriate array
         s[i] = b;
         i++;
       }
-      scanf("%c", &b);
+      scanf("%c", &b); //take in next b
     }
     
 
-    //printf("i is : %i ", i);
+    
     // When we are done looping i should hold the length of valid bases read
-    if(i != seq_len) {
+    if(i != seq_len) { //if the array is not the proper length it is wrong
       printf("Invalid: input sequence too short\n");
       return 0; // sequence too short
     }
-    printf("Valid input sequence: ");
+    printf("Valid input sequence: "); //if i and seq_len are equal they will be valid
     print_sequence(s, seq_len);
     return 1;
 }
@@ -181,7 +144,7 @@ _Bool read_sequence(char s[], int seq_len) {
  ****************************************************************************/
 _Bool is_valid_base(char b) {
   // FIXME: Add a loop here that compares the input b to elements of the bases array
-  for(int i = 0; i < NUM_BASES; i++){
+  for(int i = 0; i < NUM_BASES; i++){ 
     if(b == bases[i]){
       return 1;
     }
@@ -269,84 +232,26 @@ _Bool is_valid_base(char b) {
  ****************************************************************************/
 _Bool match(const char s1[], const char s2[],
     int len1, int len2, int threshold) {
-    int overlap = 0;
     int start = len1 - threshold ;
-    _Bool match_found; 
-    int where_found;
 
-/*
-  for (int i = 0; i< len1 && !match_found; i++){ //possiby traversing the wrong way 
-    if(s1[start -i] == s2[i]){ // i is going to increase too much for s2 doesnt make sense 
-      overlap++;
-      if(overlap == threshold){
-        match_found = 1;
-        where_found = i - (len1-1);
-      }
-    }
-    else{
-      overlap = 0;
-    }
-    if(match_found == 1){
-      print_sequence_part(s1,0,where_found); print_sequence_part(s2,0,5);
-      return 1;
-    }
-  }
- */
-
-
-    for(int i = start; i >0; i--){
+    for(int i = start; i >0; i--){ //want reverse loop so that start at end and move backwards(started this using a forward traversal and having overlap increment) I figured out that doesnt work because overlap == threshold would accidently trigger pass too early, because of the prefix for 3 it makes more sense to start at left and move that way
       if(s1[i] == s2[0]){
         if(s2[i+1] == s2[1]){
-          if(s2[i+2] == s2[2]) {
+          if(s2[i+2] == s2[2]) { //checks if number found is within the threshold
             printf("A match was found.\n");
             if (i == 17){
-              print_sequence_part(s1,0,17); print_sequence_part(s2,0,5);
+              print_sequence_part(s1,0,17); print_sequence_part(s2,0,5); //if is a prefix print accordingly
             }
             else if ( i == 16) {
-              print_sequence_part(s1,0,16); print_sequence_part(s2,0,5);
+              print_sequence_part(s1,0,16); print_sequence_part(s2,0,5); //if prefix print accordingly
             }
             else{
-              print_sequence(s1,len1);
+              print_sequence(s1,len1); //if in sequence (not at end) print sequence
             }
             return 1;
           }
         }
       }
     }
-
-    /*
-    while(threshold >= overlap && !match_found){  // or for len1-thres or len1- len2
-      if(s1[start + overlap] == s2[overlap]){
-        overlap++;
-        if(overlap == threshold) {  //maybe put in a switch case for the two cases, either prefix or in s1
-          match_found = 1;
-          where_found =  (start-1)  - overlap;
-        }
-      }
-      else{
-        overlap = 0;          
-        start--;
-      }
-      if (match_found == 1){
-        //printf(where_found);
-        //print_sequence(s1,where_found);
-        return 1;
-      }
-    }
-    
-
-    if(overlap == threshold){        // NEED TO ADD PREFIX CASE AND CONCATENATE
-      //printf("A match was found.\n");
-      //print_sequence(s1,len1);
-      return 1;
-    }
-      */
-    
-   // FIXME:  This is where the real work has to happen 
-   //         implement this function using print_sequence_part as needed
-
-    //printf("No match found.\n");
-    
-  
     return 0;
-    }
+  }
