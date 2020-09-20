@@ -1,3 +1,1614 @@
+commit 4c517f8db5ec4f803cb90c3e1087a4a396fdf9e2
+Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
+Date:   Sun Sep 20 10:57:13 2020 -0400
+
+    created new reverse loop to check  for match
+
+diff --git a/assignment-2.c b/assignment-2.c
+index 66f6c98..24bb1d2 100644
+--- a/assignment-2.c
++++ b/assignment-2.c
+@@ -60,8 +60,8 @@ int main() {
+       return -1;
+     }
+     if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 1){
+-      printf("A match was found.\n");
+-      print_sequence_part(s1,0,BASE_SEQ_LEN-THRESHOLD); print_sequence_part(s2,0,5); 
++      //printf("A match was found.\n");
++      //print_sequence_part(s1,0,BASE_SEQ_LEN-THRESHOLD); print_sequence_part(s2,0,5); 
+       return 0;
+     }
+     if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 0) {
+@@ -292,19 +292,44 @@ _Bool match(const char s1[], const char s2[],
+     }
+   }
+  */
++
++
++    for(int i = start; i >0; i--){
++      if(s1[i] == s2[0]){
++        if(s2[i+1] == s2[1]){
++          if(s2[i+2] == s2[2]) {
++            printf("A match was found.\n");
++            if (i == 17){
++              print_sequence_part(s1,0,17); print_sequence_part(s2,0,5);
++            }
++            else if ( i == 16) {
++              print_sequence_part(s1,0,16); print_sequence_part(s2,3,5);
++            }
++            else{
++              print_sequence(s1,len1);
++            }
++            return 1;
++          }
++        }
++      }
++    }
++
++    /*
+     while(threshold >= overlap && !match_found){  // or for len1-thres or len1- len2
+       if(s1[start + overlap] == s2[overlap]){
+         overlap++;
+         if(overlap == threshold) {  //maybe put in a switch case for the two cases, either prefix or in s1
+           match_found = 1;
+-          where_found =  (start) +overlap;
++          where_found =  (start-1)  - overlap;
+         }
+       }
+       else{
+-        //overlap = 0;          
++        overlap = 0;          
+         start--;
+       }
+       if (match_found == 1){
++        //printf(where_found);
++        //print_sequence(s1,where_found);
+         return 1;
+       }
+     }
+@@ -315,7 +340,7 @@ _Bool match(const char s1[], const char s2[],
+       //print_sequence(s1,len1);
+       return 1;
+     }
+-      
++      */
+     
+    // FIXME:  This is where the real work has to happen 
+    //         implement this function using print_sequence_part as needed
+diff --git a/gitlog.txt b/gitlog.txt
+index 8768d9f..ea74cb9 100644
+--- a/gitlog.txt
++++ b/gitlog.txt
+@@ -1,3 +1,1528 @@
++commit 806dd1a6b9b3ba234e4f790681f5c2c308b9760e
++Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
++Date:   Sat Sep 19 21:17:57 2020 -0400
++
++    trying to still work out match
++
++diff --git a/assignment-2.c b/assignment-2.c
++index ba1bcb0..66f6c98 100644
++--- a/assignment-2.c
+++++ b/assignment-2.c
++@@ -270,36 +270,43 @@ _Bool is_valid_base(char b) {
++ _Bool match(const char s1[], const char s2[],
++     int len1, int len2, int threshold) {
++     int overlap = 0;
++-    int start = len1 - threshold -1;
+++    int start = len1 - threshold ;
++     _Bool match_found; 
++     int where_found;
++ 
++-
++-  for (int i = 0; i< len1 && !match_found; i++){
++-    if(s1[i] == s2[i]){
+++/*
+++  for (int i = 0; i< len1 && !match_found; i++){ //possiby traversing the wrong way 
+++    if(s1[start -i] == s2[i]){ // i is going to increase too much for s2 doesnt make sense 
++       overlap++;
++       if(overlap == threshold){
++         match_found = 1;
++-        where_found = i - len1;
+++        where_found = i - (len1-1);
++       }
++     }
++     else{
++       overlap = 0;
++     }
++     if(match_found == 1){
++-      
+++      print_sequence_part(s1,0,where_found); print_sequence_part(s2,0,5);
++       return 1;
++     }
++   }
++- /*
++-    while(threshold >= overlap){  // or for len1-thres or len1- len2
+++ */
+++    while(threshold >= overlap && !match_found){  // or for len1-thres or len1- len2
++       if(s1[start + overlap] == s2[overlap]){
++         overlap++;
+++        if(overlap == threshold) {  //maybe put in a switch case for the two cases, either prefix or in s1
+++          match_found = 1;
+++          where_found =  (start) +overlap;
+++        }
++       }
++       else{
++-      //overlap = 0;          
+++        //overlap = 0;          
++         start--;
++       }
+++      if (match_found == 1){
+++        return 1;
+++      }
++     }
++     
++ 
++@@ -315,7 +322,6 @@ _Bool match(const char s1[], const char s2[],
++ 
++     //printf("No match found.\n");
++     
++-    return 0;
++-    */
+++  
++     return 0;
++     }
++diff --git a/gitlog.txt b/gitlog.txt
++index adff838..8768d9f 100644
++--- a/gitlog.txt
+++++ b/gitlog.txt
++@@ -1,3 +1,1447 @@
+++commit 36ef3132f54b029445f43f81fd59521ed73d38a7
+++Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
+++Date:   Sat Sep 19 20:22:45 2020 -0400
+++
+++    trying new loop for match with found flag
+++
+++diff --git a/assignment-2.c b/assignment-2.c
+++index d24d587..ba1bcb0 100644
+++--- a/assignment-2.c
++++++ b/assignment-2.c
+++@@ -270,49 +270,36 @@ _Bool is_valid_base(char b) {
+++ _Bool match(const char s1[], const char s2[],
+++     int len1, int len2, int threshold) {
+++     int overlap = 0;
+++-    int len = BASE_SEQ_LEN; 
+++-    int start = len - threshold -1;
+++-    
+++-
++++    int start = len1 - threshold -1;
++++    _Bool match_found; 
++++    int where_found;
+++ 
+++-   //while(threshold >= overlap){  // or for len1-thres or len1- len2
+++-      for (int i = 0; i < len1; i++) {
+++-          overlap = i;
+++-          for(int x = 0; x < len2; x++) {
+++-            if(s1[x] == s2[overlap]){
+++-                overlap++;
+++-            }
+++-            else{
+++-              break;
+++-            }
+++-          }
+++ 
+++-        
+++-          if (overlap == threshold) {
+++-            return 1;
+++-          }
+++-          
+++-        }
++++  for (int i = 0; i< len1 && !match_found; i++){
++++    if(s1[i] == s2[i]){
++++      overlap++;
++++      if(overlap == threshold){
++++        match_found = 1;
++++        where_found = i - len1;
++++      }
++++    }
++++    else{
++++      overlap = 0;
++++    }
++++    if(match_found == 1){
+++       
+++-
+++-
+++-
+++-        /*
+++-        else{
+++-          //overlap = 0;
+++-          break;
+++-        }
++++      return 1;
++++    }
++++  }
++++ /*
++++    while(threshold >= overlap){  // or for len1-thres or len1- len2
++++      if(s1[start + overlap] == s2[overlap]){
++++        overlap++;
+++       }
+++-      if (overlap == threshold) {
+++-        return 1;
++++      else{
++++      //overlap = 0;          
++++        start--;
+++       }
+++-      
+++-      //need to catch case for prefix
+++-      start = start -1;
+++-      overlap =0;
+++-        //len = len-1;
+++-        //overlap = 0;
+++-      
+++     }
+++     
+++ 
+++@@ -327,7 +314,8 @@ _Bool match(const char s1[], const char s2[],
+++    //         implement this function using print_sequence_part as needed
+++ 
+++     //printf("No match found.\n");
++++    
++++    return 0;
+++     */
+++     return 0;
+++-//}
+++     }
+++diff --git a/gitlog.txt b/gitlog.txt
+++index d5471f5..adff838 100644
+++--- a/gitlog.txt
++++++ b/gitlog.txt
+++@@ -1,3 +1,1343 @@
++++commit ad8de7660f7ae9e57a4ae4795bfb821473046643
++++Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
++++Date:   Sat Sep 19 19:00:10 2020 -0400
++++
++++    still trying to rethink match
++++
++++diff --git a/assignment-2.c b/assignment-2.c
++++index 11015f2..d24d587 100644
++++--- a/assignment-2.c
+++++++ b/assignment-2.c
++++@@ -272,15 +272,34 @@ _Bool match(const char s1[], const char s2[],
++++     int overlap = 0;
++++     int len = BASE_SEQ_LEN; 
++++     int start = len - threshold -1;
+++++    
+++++
++++ 
+++++   //while(threshold >= overlap){  // or for len1-thres or len1- len2
+++++      for (int i = 0; i < len1; i++) {
+++++          overlap = i;
+++++          for(int x = 0; x < len2; x++) {
+++++            if(s1[x] == s2[overlap]){
+++++                overlap++;
+++++            }
+++++            else{
+++++              break;
+++++            }
+++++          }
++++ 
++++-    while(threshold >= overlap){
++++-      for (int i = 0; i < threshold; i++) {
++++-        if(s1[start + i] == s2[i]){
++++-          overlap++;
++++-          continue;
+++++        
+++++          if (overlap == threshold) {
+++++            return 1;
+++++          }
+++++          
++++         }
+++++      
+++++
+++++
+++++
+++++        /*
++++         else{
+++++          //overlap = 0;
++++           break;
++++         }
++++       }
++++@@ -308,5 +327,7 @@ _Bool match(const char s1[], const char s2[],
++++    //         implement this function using print_sequence_part as needed
++++ 
++++     //printf("No match found.\n");
+++++    */
++++     return 0;
++++-}
+++++//}
+++++    }
++++diff --git a/gitlog.txt b/gitlog.txt
++++index 9c57e4e..d5471f5 100644
++++--- a/gitlog.txt
+++++++ b/gitlog.txt
++++@@ -1,3 +1,1275 @@
+++++commit b2abe3371a674cf3b8c0f0c2d1bb7b9dafef2a15
+++++Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
+++++Date:   Sat Sep 19 17:44:08 2020 -0400
+++++
+++++    rethinking the match program
+++++
+++++diff --git a/assignment-2.c b/assignment-2.c
+++++index 1e08949..11015f2 100644
+++++--- a/assignment-2.c
++++++++ b/assignment-2.c
+++++@@ -59,9 +59,9 @@ int main() {
+++++       printf("ERROR: sequence 2 is bad.  Exiting\n");
+++++       return -1;
+++++     }
+++++-     if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 1){
++++++    if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 1){
+++++       printf("A match was found.\n");
+++++-      print_sequence(s1,BASE_SEQ_LEN); 
++++++      print_sequence_part(s1,0,BASE_SEQ_LEN-THRESHOLD); print_sequence_part(s2,0,5); 
+++++       return 0;
+++++     }
+++++     if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 0) {
+++++@@ -186,14 +186,6 @@ _Bool is_valid_base(char b) {
+++++       return 1;
+++++     }
+++++   }
+++++-  
+++++-  
+++++-  
+++++-  //if (b == 'A' || b == 'T' || b == 'C' || b == 'G'){ //wait why do i need a loop???
+++++-    //return 1; 
+++++- // }
+++++-
+++++-
+++++   // if we got here then we must not have matched any of the bases elements
+++++   return 0;
+++++ }
+++++@@ -278,17 +270,33 @@ _Bool is_valid_base(char b) {
+++++ _Bool match(const char s1[], const char s2[],
+++++     int len1, int len2, int threshold) {
+++++     int overlap = 0;
+++++-    int len = BASE_SEQ_LEN;
++++++    int len = BASE_SEQ_LEN; 
++++++    int start = len - threshold -1;
++++++
++++++
+++++     while(threshold >= overlap){
+++++-      if(s1[len - threshold + overlap] == s2[len2 - threshold + overlap]){
+++++-        
+++++-        overlap++;
++++++      for (int i = 0; i < threshold; i++) {
++++++        if(s1[start + i] == s2[i]){
++++++          overlap++;
++++++          continue;
++++++        }
++++++        else{
++++++          break;
++++++        }
+++++       }
+++++-      else{
+++++-        len = len-1;
+++++-        overlap = 0;
++++++      if (overlap == threshold) {
++++++        return 1;
+++++       }
++++++      
++++++      //need to catch case for prefix
++++++      start = start -1;
++++++      overlap =0;
++++++        //len = len-1;
++++++        //overlap = 0;
++++++      
+++++     }
++++++    
++++++
+++++     if(overlap == threshold){        // NEED TO ADD PREFIX CASE AND CONCATENATE
+++++       //printf("A match was found.\n");
+++++       //print_sequence(s1,len1);
+++++diff --git a/gitlog.txt b/gitlog.txt
+++++index 55318ea..9c57e4e 100644
+++++--- a/gitlog.txt
++++++++ b/gitlog.txt
+++++@@ -1,3 +1,1188 @@
++++++commit 3c44c2a4ba6f9452e602374b66ddf92a43f0c9e0
++++++Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
++++++Date:   Fri Sep 18 20:29:05 2020 -0400
++++++
++++++    need to add prefix/ concatenation case
++++++
++++++diff --git a/assignment-2.c b/assignment-2.c
++++++index d214c4d..1e08949 100644
++++++--- a/assignment-2.c
+++++++++ b/assignment-2.c
++++++@@ -289,7 +289,7 @@ _Bool match(const char s1[], const char s2[],
++++++         overlap = 0;
++++++       }
++++++     }
++++++-    if(overlap == threshold){
+++++++    if(overlap == threshold){        // NEED TO ADD PREFIX CASE AND CONCATENATE
++++++       //printf("A match was found.\n");
++++++       //print_sequence(s1,len1);
++++++       return 1;
++++++diff --git a/gitlog.txt b/gitlog.txt
++++++index 7d3aa56..55318ea 100644
++++++--- a/gitlog.txt
+++++++++ b/gitlog.txt
++++++@@ -1,3 +1,1160 @@
+++++++commit 0f42f172a611a29af26621616176f7fae70815f0
+++++++Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
+++++++Date:   Fri Sep 18 19:56:59 2020 -0400
+++++++
+++++++    corrected match for non bonus case
+++++++
+++++++diff --git a/assignment-2.c b/assignment-2.c
+++++++index f7d5aaa..d214c4d 100644
+++++++--- a/assignment-2.c
++++++++++ b/assignment-2.c
+++++++@@ -279,13 +279,14 @@ _Bool match(const char s1[], const char s2[],
+++++++     int len1, int len2, int threshold) {
+++++++     int overlap = 0;
+++++++     int len = BASE_SEQ_LEN;
+++++++-    while(threshold > overlap){
++++++++    while(threshold >= overlap){
+++++++       if(s1[len - threshold + overlap] == s2[len2 - threshold + overlap]){
+++++++         
+++++++         overlap++;
+++++++       }
+++++++       else{
+++++++         len = len-1;
++++++++        overlap = 0;
+++++++       }
+++++++     }
+++++++     if(overlap == threshold){
+++++++diff --git a/gitlog.txt b/gitlog.txt
+++++++index b796020..7d3aa56 100644
+++++++--- a/gitlog.txt
++++++++++ b/gitlog.txt
+++++++@@ -1,3 +1,1125 @@
++++++++commit c40c56af101a555dcf52f8d04cfdf39f6aff31c7
++++++++Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
++++++++Date:   Fri Sep 18 19:28:48 2020 -0400
++++++++
++++++++    match working, read_sequence missing 1st letter
++++++++
++++++++diff --git a/assignment-2.c b/assignment-2.c
++++++++index 4a33fe5..f7d5aaa 100644
++++++++--- a/assignment-2.c
+++++++++++ b/assignment-2.c
++++++++@@ -50,14 +50,25 @@ int main() {
++++++++ 
++++++++     
++++++++     // 1: Read base input sequence into s1 array
++++++++-    if(read_sequence(s1,20) == 0) {
+++++++++    if(read_sequence(s1,BASE_SEQ_LEN) == 0) {
++++++++       // if read_sequence returned false then there was an error
++++++++       printf("ERROR: sequence 1 is bad.  Exiting\n");
++++++++       return -1;
++++++++     }
++++++++-    if(read_sequence(s2,5) == 0){
+++++++++    if(read_sequence(s2,TARGET_SEQ_LEN) == 0){
++++++++       printf("ERROR: sequence 2 is bad.  Exiting\n");
+++++++++      return -1;
+++++++++    }
+++++++++     if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 1){
+++++++++      printf("A match was found.\n");
+++++++++      print_sequence(s1,BASE_SEQ_LEN); 
+++++++++      return 0;
++++++++     }
+++++++++    if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 0) {
+++++++++      printf("No match found.\n");
+++++++++      return 0;
+++++++++    }
+++++++++
++++++++    // }
++++++++     /*if(read_sequence(s2,5) == 0){
++++++++       printf("ERROR: sequence 2 is bad.  Exiting\n");
++++++++@@ -267,18 +278,19 @@ _Bool is_valid_base(char b) {
++++++++ _Bool match(const char s1[], const char s2[],
++++++++     int len1, int len2, int threshold) {
++++++++     int overlap = 0;
++++++++-    int len = len1;
+++++++++    int len = BASE_SEQ_LEN;
++++++++     while(threshold > overlap){
++++++++       if(s1[len - threshold + overlap] == s2[len2 - threshold + overlap]){
+++++++++        
++++++++         overlap++;
++++++++       }
++++++++       else{
++++++++-        len = len1-1;
+++++++++        len = len-1;
++++++++       }
++++++++     }
++++++++     if(overlap == threshold){
++++++++-      printf("A match was found.");
++++++++-      print_sequence(s1,len1);
+++++++++      //printf("A match was found.\n");
+++++++++      //print_sequence(s1,len1);
++++++++       return 1;
++++++++     }
++++++++       
++++++++@@ -286,6 +298,6 @@ _Bool match(const char s1[], const char s2[],
++++++++    // FIXME:  This is where the real work has to happen 
++++++++    //         implement this function using print_sequence_part as needed
++++++++ 
++++++++-    printf("No match found.\n");
+++++++++    //printf("No match found.\n");
++++++++     return 0;
++++++++ }
++++++++diff --git a/gitlog.txt b/gitlog.txt
++++++++index acf4fbe..b796020 100644
++++++++--- a/gitlog.txt
+++++++++++ b/gitlog.txt
++++++++@@ -1,3 +1,1046 @@
+++++++++commit 904c90a4ffcdb2aa620fc58c17146257c822f5e2
+++++++++Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
+++++++++Date:   Fri Sep 18 17:57:24 2020 -0400
+++++++++
+++++++++    read_sequence success
+++++++++
+++++++++diff --git a/assignment-2.c b/assignment-2.c
+++++++++index cd67408..4a33fe5 100644
+++++++++--- a/assignment-2.c
++++++++++++ b/assignment-2.c
+++++++++@@ -56,8 +56,8 @@ int main() {
+++++++++       return -1;
+++++++++     }
+++++++++     if(read_sequence(s2,5) == 0){
+++++++++-      printf("ERRO: sequence 2 is bad.  Exiting\n");
+++++++++-
++++++++++      printf("ERROR: sequence 2 is bad.  Exiting\n");
++++++++++    }
+++++++++    // }
+++++++++     /*if(read_sequence(s2,5) == 0){
+++++++++       printf("ERROR: sequence 2 is bad.  Exiting\n");
+++++++++@@ -145,7 +145,7 @@ _Bool read_sequence(char s[], int seq_len) {
+++++++++ 
+++++++++    while(b != '\n'){
+++++++++       if ((i < seq_len) && (is_valid_base(b) == 1)) {
+++++++++-        s[i] == b;
++++++++++        s[i] = b;
+++++++++         i++;
+++++++++       }
+++++++++       scanf("%c", &b);
+++++++++diff --git a/gitlog.txt b/gitlog.txt
+++++++++index f0ad621..acf4fbe 100644
+++++++++--- a/gitlog.txt
++++++++++++ b/gitlog.txt
+++++++++@@ -1,3 +1,1007 @@
++++++++++commit f4ca6fc896cc7fd82eaeee36c933026944222fa3
++++++++++Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
++++++++++Date:   Fri Sep 18 17:53:56 2020 -0400
++++++++++
++++++++++    believe to have fixed read_sequence
++++++++++
++++++++++diff --git a/assignment-2.c b/assignment-2.c
++++++++++index 0f16f98..cd67408 100644
++++++++++--- a/assignment-2.c
+++++++++++++ b/assignment-2.c
++++++++++@@ -55,10 +55,11 @@ int main() {
++++++++++       printf("ERROR: sequence 1 is bad.  Exiting\n");
++++++++++       return -1;
++++++++++     }
++++++++++-    if(read_sequence(s1,20) == 1){
++++++++++-      printf("Valid input sequence: \n");
++++++++++-    }
++++++++++     if(read_sequence(s2,5) == 0){
+++++++++++      printf("ERRO: sequence 2 is bad.  Exiting\n");
+++++++++++
+++++++++++   // }
+++++++++++    /*if(read_sequence(s2,5) == 0){
++++++++++       printf("ERROR: sequence 2 is bad.  Exiting\n");
++++++++++       return -1;
++++++++++     }
++++++++++@@ -66,6 +67,7 @@ int main() {
++++++++++       printf("Valid input sequence: \n");
++++++++++       
++++++++++     }
+++++++++++    */
++++++++++     // FIXME: You need to finish the main function 
++++++++++     // FIXME: 2: Read target input sequence into s2 array
++++++++++ 
++++++++++@@ -136,32 +138,25 @@ _Bool read_sequence(char s[], int seq_len) {
++++++++++       
++++++++++       }
++++++++++       */
++++++++++-    }
+++++++++++    //}
++++++++++     //Loop until new line 
++++++++++     // FIXME: ADD your loop here
+++++++++++
+++++++++++
++++++++++    while(b != '\n'){
++++++++++-      if (i < seq_len){
++++++++++-        if (is_valid_base(b) == 1){ // or is_valid_base == true;
+++++++++++      if ((i < seq_len) && (is_valid_base(b) == 1)) {
++++++++++         s[i] == b;
++++++++++         i++;
++++++++++       }
++++++++++-      }
++++++++++       scanf("%c", &b);
++++++++++-      if (is_valid_base(b) == 1){ // or is_valid_base == true;
++++++++++-        s[i] == b;
++++++++++-        i++;
++++++++++-      }
++++++++++-    /  else{
++++++++++-        //i++; //want to not skip over 
++++++++++-       continue;
++++++++++-      }
++++++++++     }
+++++++++++    
++++++++++ 
++++++++++-
+++++++++++    //printf("i is : %i ", i);
++++++++++     // When we are done looping i should hold the length of valid bases read
++++++++++-    if (i != (seq_len-1)) {
+++++++++++    if(i != seq_len) {
++++++++++       printf("Invalid: input sequence too short\n");
++++++++++-       return 0; // sequence too short
+++++++++++      return 0; // sequence too short
++++++++++     }
++++++++++     printf("Valid input sequence: ");
++++++++++     print_sequence(s, seq_len);
++++++++++@@ -175,7 +170,7 @@ _Bool read_sequence(char s[], int seq_len) {
++++++++++  ****************************************************************************/
++++++++++ _Bool is_valid_base(char b) {
++++++++++   // FIXME: Add a loop here that compares the input b to elements of the bases array
++++++++++-  for(int i = 0; i < 4; i++){
+++++++++++  for(int i = 0; i < NUM_BASES; i++){
++++++++++     if(b == bases[i]){
++++++++++       return 1;
++++++++++     }
++++++++++diff --git a/gitlog.txt b/gitlog.txt
++++++++++index be3e2b2..f0ad621 100644
++++++++++--- a/gitlog.txt
+++++++++++++ b/gitlog.txt
++++++++++@@ -1,3 +1,915 @@
+++++++++++commit 2d9c641bdffca050c06d7e45ecb481b6c74cfc02
+++++++++++Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
+++++++++++Date:   Fri Sep 18 16:17:10 2020 -0400
+++++++++++
+++++++++++    trying to figure out read_sequence
+++++++++++
+++++++++++diff --git a/assignment-2.c b/assignment-2.c
+++++++++++index 79a22fa..0f16f98 100644
+++++++++++--- a/assignment-2.c
++++++++++++++ b/assignment-2.c
+++++++++++@@ -47,8 +47,10 @@ const char bases[] = {'A', 'T', 'C', 'G'};
+++++++++++ int main() {
+++++++++++     char s1[20], s2[5];
+++++++++++ 
++++++++++++
++++++++++++    
+++++++++++     // 1: Read base input sequence into s1 array
+++++++++++-    if (read_sequence(s1, 20) == 0) {
++++++++++++    if(read_sequence(s1,20) == 0) {
+++++++++++       // if read_sequence returned false then there was an error
+++++++++++       printf("ERROR: sequence 1 is bad.  Exiting\n");
+++++++++++       return -1;
+++++++++++@@ -56,6 +58,14 @@ int main() {
+++++++++++     if(read_sequence(s1,20) == 1){
+++++++++++       printf("Valid input sequence: \n");
+++++++++++     }
++++++++++++    if(read_sequence(s2,5) == 0){
++++++++++++      printf("ERROR: sequence 2 is bad.  Exiting\n");
++++++++++++      return -1;
++++++++++++    }
++++++++++++    if (read_sequence(s2,5) == 1){
++++++++++++      printf("Valid input sequence: \n");
++++++++++++      
++++++++++++    }
+++++++++++     // FIXME: You need to finish the main function 
+++++++++++     // FIXME: 2: Read target input sequence into s2 array
+++++++++++ 
+++++++++++@@ -114,17 +124,36 @@ _Bool read_sequence(char s[], int seq_len) {
+++++++++++     printf("Enter a sequence of length %d: ", seq_len);
+++++++++++     // Read first character in to get us started
+++++++++++     scanf("%c", &b);
+++++++++++-
+++++++++++-    // Loop until new line 
++++++++++++    /*for (i; i < seq_len; i++){
++++++++++++      scanf("%c", &b);
++++++++++++      if(b != '\n'){
++++++++++++        if(is_valid_base(b) == 1) {
++++++++++++        s[i] == b;
++++++++++++        }
++++++++++++        else{
++++++++++++          continue; //break;
++++++++++++        }
++++++++++++      
++++++++++++      }
++++++++++++      */
++++++++++++    }
++++++++++++    //Loop until new line 
+++++++++++     // FIXME: ADD your loop here
+++++++++++-    while(b != '\n' && i < seq_len){
+++++++++++-      if (b == 'A' || b == 'T' || b == 'C' || b == 'G'){ // or is_valid_base == true;
++++++++++++   while(b != '\n'){
++++++++++++      if (i < seq_len){
++++++++++++        if (is_valid_base(b) == 1){ // or is_valid_base == true;
+++++++++++         s[i] == b;
+++++++++++         i++;
+++++++++++       }
+++++++++++-      else{
++++++++++++      }
++++++++++++      scanf("%c", &b);
++++++++++++      if (is_valid_base(b) == 1){ // or is_valid_base == true;
++++++++++++        s[i] == b;
+++++++++++         i++;
+++++++++++-        continue;
++++++++++++      }
++++++++++++    /  else{
++++++++++++        //i++; //want to not skip over 
++++++++++++       continue;
+++++++++++       }
+++++++++++     }
+++++++++++ 
+++++++++++@@ -146,9 +175,17 @@ _Bool read_sequence(char s[], int seq_len) {
+++++++++++  ****************************************************************************/
+++++++++++ _Bool is_valid_base(char b) {
+++++++++++   // FIXME: Add a loop here that compares the input b to elements of the bases array
+++++++++++-    if (b == 'A' || b == 'T' || b == 'C' || b == 'G'){ //wait why do i need a loop???
+++++++++++-      return 1; 
++++++++++++  for(int i = 0; i < 4; i++){
++++++++++++    if(b == bases[i]){
++++++++++++      return 1;
+++++++++++     }
++++++++++++  }
++++++++++++  
++++++++++++  
++++++++++++  
++++++++++++  //if (b == 'A' || b == 'T' || b == 'C' || b == 'G'){ //wait why do i need a loop???
++++++++++++    //return 1; 
++++++++++++ // }
+++++++++++ 
+++++++++++ 
+++++++++++   // if we got here then we must not have matched any of the bases elements
+++++++++++diff --git a/gitlog.txt b/gitlog.txt
+++++++++++index 4ff0cd6..be3e2b2 100644
+++++++++++--- a/gitlog.txt
++++++++++++++ b/gitlog.txt
+++++++++++@@ -1,3 +1,806 @@
++++++++++++commit 727f0af7a07c63de2ffcdd4fdbaf5e9b8573705c
++++++++++++Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
++++++++++++Date:   Fri Sep 18 10:59:32 2020 -0400
++++++++++++
++++++++++++    trying to get read_sequence to work
++++++++++++
++++++++++++diff --git a/assignment-2.c b/assignment-2.c
++++++++++++index 94cf902..79a22fa 100644
++++++++++++--- a/assignment-2.c
+++++++++++++++ b/assignment-2.c
++++++++++++@@ -53,6 +53,9 @@ int main() {
++++++++++++       printf("ERROR: sequence 1 is bad.  Exiting\n");
++++++++++++       return -1;
++++++++++++     }
+++++++++++++    if(read_sequence(s1,20) == 1){
+++++++++++++      printf("Valid input sequence: \n");
+++++++++++++    }
++++++++++++     // FIXME: You need to finish the main function 
++++++++++++     // FIXME: 2: Read target input sequence into s2 array
++++++++++++ 
++++++++++++@@ -114,7 +117,7 @@ _Bool read_sequence(char s[], int seq_len) {
++++++++++++ 
++++++++++++     // Loop until new line 
++++++++++++     // FIXME: ADD your loop here
++++++++++++-    while(b != '\n' && i <= seq_len){
+++++++++++++    while(b != '\n' && i < seq_len){
++++++++++++       if (b == 'A' || b == 'T' || b == 'C' || b == 'G'){ // or is_valid_base == true;
++++++++++++         s[i] == b;
++++++++++++         i++;
++++++++++++@@ -127,7 +130,7 @@ _Bool read_sequence(char s[], int seq_len) {
++++++++++++ 
++++++++++++ 
++++++++++++     // When we are done looping i should hold the length of valid bases read
++++++++++++-    if (i != seq_len) {
+++++++++++++    if (i != (seq_len-1)) {
++++++++++++       printf("Invalid: input sequence too short\n");
++++++++++++        return 0; // sequence too short
++++++++++++     }
++++++++++++@@ -230,7 +233,7 @@ _Bool is_valid_base(char b) {
++++++++++++  *                                                                          *
++++++++++++  ****************************************************************************/
++++++++++++ _Bool match(const char s1[], const char s2[],
++++++++++++-     int len1, int len2, int threshold) {
+++++++++++++    int len1, int len2, int threshold) {
++++++++++++     int overlap = 0;
++++++++++++     int len = len1;
++++++++++++     while(threshold > overlap){
++++++++++++diff --git a/gitlog.txt b/gitlog.txt
++++++++++++index c0fbaef..4ff0cd6 100644
++++++++++++--- a/gitlog.txt
+++++++++++++++ b/gitlog.txt
++++++++++++@@ -1,3 +1,750 @@
+++++++++++++commit 7b5bb2222f9e4912ae8516fa1350b4258b179a5c
+++++++++++++Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
+++++++++++++Date:   Wed Sep 16 16:31:28 2020 -0400
+++++++++++++
+++++++++++++    added i++ to else statement in read_sequence
+++++++++++++
+++++++++++++diff --git a/assignment-2.c b/assignment-2.c
+++++++++++++index 7ff8c7e..94cf902 100644
+++++++++++++--- a/assignment-2.c
++++++++++++++++ b/assignment-2.c
+++++++++++++@@ -120,6 +120,7 @@ _Bool read_sequence(char s[], int seq_len) {
+++++++++++++         i++;
+++++++++++++       }
+++++++++++++       else{
++++++++++++++        i++;
+++++++++++++         continue;
+++++++++++++       }
+++++++++++++     }
+++++++++++++diff --git a/gitlog.txt b/gitlog.txt
+++++++++++++index 953bda0..c0fbaef 100644
+++++++++++++--- a/gitlog.txt
++++++++++++++++ b/gitlog.txt
+++++++++++++@@ -1,3 +1,723 @@
++++++++++++++commit 067b2df50f5796d0c2cccd345420cb4cf2c46aa3
++++++++++++++Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
++++++++++++++Date:   Wed Sep 16 16:26:06 2020 -0400
++++++++++++++
++++++++++++++    trying to work out shifting the first array
++++++++++++++
++++++++++++++diff --git a/assignment-2.c b/assignment-2.c
++++++++++++++index c80a27f..7ff8c7e 100644
++++++++++++++--- a/assignment-2.c
+++++++++++++++++ b/assignment-2.c
++++++++++++++@@ -115,7 +115,7 @@ _Bool read_sequence(char s[], int seq_len) {
++++++++++++++     // Loop until new line 
++++++++++++++     // FIXME: ADD your loop here
++++++++++++++     while(b != '\n' && i <= seq_len){
++++++++++++++-      if (b == 'A' || b == 'T' || b == 'C' || b == 'G'){
+++++++++++++++      if (b == 'A' || b == 'T' || b == 'C' || b == 'G'){ // or is_valid_base == true;
++++++++++++++         s[i] == b;
++++++++++++++         i++;
++++++++++++++       }
++++++++++++++@@ -142,7 +142,9 @@ _Bool read_sequence(char s[], int seq_len) {
++++++++++++++  ****************************************************************************/
++++++++++++++ _Bool is_valid_base(char b) {
++++++++++++++   // FIXME: Add a loop here that compares the input b to elements of the bases array
++++++++++++++-
+++++++++++++++    if (b == 'A' || b == 'T' || b == 'C' || b == 'G'){ //wait why do i need a loop???
+++++++++++++++      return 1; 
+++++++++++++++    }
++++++++++++++ 
++++++++++++++ 
++++++++++++++   // if we got here then we must not have matched any of the bases elements
++++++++++++++@@ -228,6 +230,23 @@ _Bool is_valid_base(char b) {
++++++++++++++  ****************************************************************************/
++++++++++++++ _Bool match(const char s1[], const char s2[],
++++++++++++++      int len1, int len2, int threshold) {
+++++++++++++++    int overlap = 0;
+++++++++++++++    int len = len1;
+++++++++++++++    while(threshold > overlap){
+++++++++++++++      if(s1[len - threshold + overlap] == s2[len2 - threshold + overlap]){
+++++++++++++++        overlap++;
+++++++++++++++      }
+++++++++++++++      else{
+++++++++++++++        len = len1-1;
+++++++++++++++      }
+++++++++++++++    }
+++++++++++++++    if(overlap == threshold){
+++++++++++++++      printf("A match was found.");
+++++++++++++++      print_sequence(s1,len1);
+++++++++++++++      return 1;
+++++++++++++++    }
+++++++++++++++      
+++++++++++++++    
++++++++++++++    // FIXME:  This is where the real work has to happen 
++++++++++++++    //         implement this function using print_sequence_part as needed
++++++++++++++ 
++++++++++++++diff --git a/gitlog.txt b/gitlog.txt
++++++++++++++index e69de29..953bda0 100644
++++++++++++++--- a/gitlog.txt
+++++++++++++++++ b/gitlog.txt
++++++++++++++@@ -0,0 +1,660 @@
+++++++++++++++commit 62346a9fe90f8489686f126132f8dade2a0973f9
+++++++++++++++Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
+++++++++++++++Date:   Wed Sep 16 14:48:55 2020 -0400
+++++++++++++++
+++++++++++++++    added loop to read_seqeunce
+++++++++++++++
+++++++++++++++diff --git a/assignment-2.c b/assignment-2.c
+++++++++++++++index 9c0c60d..c80a27f 100644
+++++++++++++++--- a/assignment-2.c
++++++++++++++++++ b/assignment-2.c
+++++++++++++++@@ -114,6 +114,15 @@ _Bool read_sequence(char s[], int seq_len) {
+++++++++++++++ 
+++++++++++++++     // Loop until new line 
+++++++++++++++     // FIXME: ADD your loop here
++++++++++++++++    while(b != '\n' && i <= seq_len){
++++++++++++++++      if (b == 'A' || b == 'T' || b == 'C' || b == 'G'){
++++++++++++++++        s[i] == b;
++++++++++++++++        i++;
++++++++++++++++      }
++++++++++++++++      else{
++++++++++++++++        continue;
++++++++++++++++      }
++++++++++++++++    }
+++++++++++++++ 
+++++++++++++++ 
+++++++++++++++     // When we are done looping i should hold the length of valid bases read
+++++++++++++++
+++++++++++++++commit c1a8695268bc1979c8e7ac5e13e510f6de6125ea
+++++++++++++++Author: Jonathan Appavoo <jappavoo@bu.edu>
+++++++++++++++Date:   Mon Sep 14 18:15:36 2020 -0400
+++++++++++++++
+++++++++++++++    Initial Commit to seed assignment 2.  Second Fall 2020 CS210 Assignment.  Have fun!
+++++++++++++++
+++++++++++++++diff --git a/.gitignore b/.gitignore
+++++++++++++++new file mode 100644
+++++++++++++++index 0000000..e1a273a
+++++++++++++++--- /dev/null
++++++++++++++++++ b/.gitignore
+++++++++++++++@@ -0,0 +1,4 @@
++++++++++++++++*
++++++++++++++++!assignment-2.c
++++++++++++++++!gitlog.txt
++++++++++++++++
+++++++++++++++diff --git a/.vscode/launch.json b/.vscode/launch.json
+++++++++++++++new file mode 100644
+++++++++++++++index 0000000..6eac52b
+++++++++++++++--- /dev/null
++++++++++++++++++ b/.vscode/launch.json
+++++++++++++++@@ -0,0 +1,30 @@
++++++++++++++++{
++++++++++++++++    // Use IntelliSense to learn about possible attributes.
++++++++++++++++    // Hover to view descriptions of existing attributes.
++++++++++++++++    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
++++++++++++++++    "version": "0.2.0",
++++++++++++++++    "configurations": [
++++++++++++++++    
++++++++++++++++
++++++++++++++++        {
++++++++++++++++            "name": "(gdb) Launch",
++++++++++++++++            "type": "cppdbg",
++++++++++++++++            "request": "launch",
++++++++++++++++            "program": "${workspaceFolder}/assignment-1",
++++++++++++++++            "args": [],
++++++++++++++++            "stopAtEntry": true,
++++++++++++++++            "cwd": "${workspaceFolder}",
++++++++++++++++            "environment": [],
++++++++++++++++            "externalConsole": false,
++++++++++++++++            "MIMode": "gdb",
++++++++++++++++            "setupCommands": [
++++++++++++++++                {
++++++++++++++++                    "description": "Enable pretty-printing for gdb",
++++++++++++++++                    "text": "-enable-pretty-printing",
++++++++++++++++                    "ignoreFailures": true
++++++++++++++++                }
++++++++++++++++            ],
++++++++++++++++            "preLaunchTask": "Build"
++++++++++++++++        }
++++++++++++++++    ]
++++++++++++++++}
+++++++++++++++diff --git a/.vscode/settings.json b/.vscode/settings.json
+++++++++++++++new file mode 100644
+++++++++++++++index 0000000..2016988
+++++++++++++++--- /dev/null
++++++++++++++++++ b/.vscode/settings.json
+++++++++++++++@@ -0,0 +1,21 @@
++++++++++++++++{
++++++++++++++++    "git.ignoreLegacyWarning": true,
++++++++++++++++    "files.autoSave": "afterDelay",
++++++++++++++++    "files.exclude": {
++++++++++++++++        ".vscode": true,
++++++++++++++++        "**/*.o": true,
++++++++++++++++        "reference": true,
++++++++++++++++        "assignment-2": true,
++++++++++++++++        "test.sh":true,
++++++++++++++++        "gitlog.txt":true,
++++++++++++++++        ".gitignore":true
++++++++++++++++    },
++++++++++++++++    "editor.renderControlCharacters": true,
++++++++++++++++    "C_Cpp.default.cStandard": "c99",
++++++++++++++++    "C_Cpp.default.cppStandard": "gnu++11",
++++++++++++++++    "C_Cpp.default.defines": [],
++++++++++++++++    "C_Cpp.intelliSenseEngine": "Disabled",
++++++++++++++++    "C_Cpp.workspaceParsingPriority": "low",
++++++++++++++++    "C_Cpp.intelliSenseCacheSize": 100,
++++++++++++++++    "C_Cpp.default.browse.limitSymbolsToIncludedHeaders": true
++++++++++++++++}
+++++++++++++++diff --git a/.vscode/tasks.json b/.vscode/tasks.json
+++++++++++++++new file mode 100644
+++++++++++++++index 0000000..d02618f
+++++++++++++++--- /dev/null
++++++++++++++++++ b/.vscode/tasks.json
+++++++++++++++@@ -0,0 +1,28 @@
++++++++++++++++{
++++++++++++++++    // See https://go.microsoft.com/fwlink/?LinkId=733558
++++++++++++++++    // for the documentation about the tasks.json format
++++++++++++++++    "version": "2.0.0",
++++++++++++++++    "tasks": [
++++++++++++++++        {
++++++++++++++++            "label": "Build",
++++++++++++++++            "type": "shell",
++++++++++++++++            "command": "make",
++++++++++++++++            "options": {
++++++++++++++++                "cwd": "${workspaceFolder}"
++++++++++++++++            },
++++++++++++++++            "group": {
++++++++++++++++                "kind": "build",
++++++++++++++++                "isDefault": true
++++++++++++++++            },
++++++++++++++++            "presentation": {
++++++++++++++++                "reveal": "always",
++++++++++++++++                "panel": "shared"
++++++++++++++++            },
++++++++++++++++            "problemMatcher": {
++++++++++++++++                "base": "$gcc",
++++++++++++++++                "fileLocation": ["relative", "${workspaceRoot}/"]
++++++++++++++++            }
++++++++++++++++        }
++++++++++++++++        
++++++++++++++++    ]
++++++++++++++++}
+++++++++++++++diff --git a/Makefile b/Makefile
+++++++++++++++new file mode 100644
+++++++++++++++index 0000000..7a4370d
+++++++++++++++--- /dev/null
++++++++++++++++++ b/Makefile
+++++++++++++++@@ -0,0 +1,15 @@
++++++++++++++++.PHONY: all clean test gitlog
++++++++++++++++
++++++++++++++++all: assignment-2
++++++++++++++++
++++++++++++++++assignment-2: assignment-2.c
++++++++++++++++	${CC} -std=c99 -g assignment-2.c -o assignment-2
++++++++++++++++	
++++++++++++++++test: assignment-2 gitlog
++++++++++++++++	./test.sh
++++++++++++++++
++++++++++++++++gitlog:
++++++++++++++++	git log -p > gitlog.txt
++++++++++++++++	
++++++++++++++++clean:
++++++++++++++++	-${RM} assignment-2
+++++++++++++++\ No newline at end of file
+++++++++++++++diff --git a/assignment-2.c b/assignment-2.c
+++++++++++++++new file mode 100644
+++++++++++++++index 0000000..9c0c60d
+++++++++++++++--- /dev/null
++++++++++++++++++ b/assignment-2.c
+++++++++++++++@@ -0,0 +1,227 @@
++++++++++++++++/**
++++++++++++++++ * Assignment #2: Loops, functions, arrays.
++++++++++++++++ * This program computes simple DNA matching between 2 sequences.
++++++++++++++++ **/
++++++++++++++++
++++++++++++++++#include <stdio.h>
++++++++++++++++#include <stdbool.h>
++++++++++++++++
++++++++++++++++#define BASE_SEQ_LEN 20
++++++++++++++++#define TARGET_SEQ_LEN 5
++++++++++++++++#define NUM_BASES 4
++++++++++++++++#define THRESHOLD 3
++++++++++++++++
++++++++++++++++
++++++++++++++++/**********************************************************************
++++++++++++++++ *  You should :                                                      *
++++++++++++++++ *   1) carefully read over the writeup on piazza                     *
++++++++++++++++ *   2) carefully read over the code                                  *
++++++++++++++++ *   3) run make test to see how the reference binary behaves         *
++++++++++++++++ *   4) find the locations you need to add code and progressively     *
++++++++++++++++ *      update your code till it behaves the same as the reference.   *
++++++++++++++++ *      Don't forget to commit regularly as you conduct your work     *
++++++++++++++++ *                                                                    *
++++++++++++++++ *  Each function documents how it should behave.                     *
++++++++++++++++ *  If you are unsure about how your program should work use the      *
++++++++++++++++ *  the reference executable provided to understand what the correct  *
++++++++++++++++ *  behavior is.  When you run make test you see a series of          *
++++++++++++++++ *  inputs that we will be testing your program with.                 *
++++++++++++++++/**********************************************************************/
++++++++++++++++
++++++++++++++++/* function prototypes */
++++++++++++++++/*  See function definitions below for documentation */
++++++++++++++++_Bool read_sequence(char[], int);
++++++++++++++++_Bool match(const char[], const char[], int, int, int);
++++++++++++++++void print_sequence_part(const char[], int, int);
++++++++++++++++void print_sequence(const char[], int);
++++++++++++++++_Bool is_valid_base(char);
++++++++++++++++
++++++++++++++++/* external variables */
++++++++++++++++const char bases[] = {'A', 'T', 'C', 'G'};
++++++++++++++++
++++++++++++++++/**
++++++++++++++++ * main: This function needs to read and store a sequence of length
++++++++++++++++ *       BASE_SEQ_LEN. Then it needs to read and store a sequence of 
++++++++++++++++ *       TARGET_SEQ_LEN. Finally it needs to call match() with both sequences.
++++++++++++++++**/
++++++++++++++++int main() {
++++++++++++++++    char s1[20], s2[5];
++++++++++++++++
++++++++++++++++    // 1: Read base input sequence into s1 array
++++++++++++++++    if (read_sequence(s1, 20) == 0) {
++++++++++++++++      // if read_sequence returned false then there was an error
++++++++++++++++      printf("ERROR: sequence 1 is bad.  Exiting\n");
++++++++++++++++      return -1;
++++++++++++++++    }
++++++++++++++++    // FIXME: You need to finish the main function 
++++++++++++++++    // FIXME: 2: Read target input sequence into s2 array
++++++++++++++++
++++++++++++++++    // FIXME: 3: Call match function to look for match and print merged
++++++++++++++++    // sequence if a match is found
++++++++++++++++
++++++++++++++++
++++++++++++++++
++++++++++++++++
++++++++++++++++    return 0;
++++++++++++++++}
++++++++++++++++
++++++++++++++++/****************************************************************************
++++++++++++++++ * Prints a sequence part indicated by the start and end (excluded) indices.*
++++++++++++++++ ****************************************************************************/
++++++++++++++++void print_sequence_part(const char s[], int start, int end) {
++++++++++++++++    for (int i=start; i<end; i++) {
++++++++++++++++        printf("%c", s[i]);
++++++++++++++++    }
++++++++++++++++}
++++++++++++++++
++++++++++++++++/****************************************************************************
++++++++++++++++ * Prints a sequence of bases.                                              *
++++++++++++++++ ****************************************************************************/
++++++++++++++++void print_sequence(const char s[], int len) {
++++++++++++++++    print_sequence_part(s, 0, len);
++++++++++++++++    printf("\n");
++++++++++++++++}
++++++++++++++++
++++++++++++++++/****************************************************************************
++++++++++++++++ * Prompts the user to input a seq_len sequence and press Enter/Return      *
++++++++++++++++ * reads a sequence of bases (A, T, C, G) and stores it in s.               *
++++++++++++++++ * Invalid bases (values that not one of the four valid bases) are ignored. *
++++++++++++++++ * If the  sequence inputed is too short then return false                  *
++++++++++++++++ *                                                                          *
++++++++++++++++ * A newline '\n' is generated when the user presses the Enter or Return    *
++++++++++++++++ * key. In such cases scanf will read the special ascii value '\n' into the *
++++++++++++++++ * variable.                                                                *  
++++++++++++++++ *                                                                          *
++++++++++++++++ * In our case we should continue to read values until we encounter a       *
++++++++++++++++ * newline.  Prior to reading a newline each valid base should be stored    *
++++++++++++++++ * consecutively into the s array until seq_len valid values have been      *
++++++++++++++++ * read.  Any addtioinal values should be ignored.                          *
++++++++++++++++ * eg.                                                                      *
++++++++++++++++ *   assuming seq_len=3                                                     *
++++++++++++++++ *    INPUT: "AGG\n"->  s[0]='A' s[1]='G' s[2]='G' return true              *
++++++++++++++++ *    INPUT: "aAgGqGv\n"->  s[0]='A' s[1]='G' s[2]='G' return true          *
++++++++++++++++ *    INPUT: "A\n"-> s[0]='A' return false                                  *
++++++++++++++++ *    INPUT: "aaaaaaaaaaaaaa' -> return false                               *
++++++++++++++++ *    INPUT: "AGGTAGGT" -> s[0]='A' s[1]='G' s[2]='G' return true           *
++++++++++++++++ ****************************************************************************/
++++++++++++++++_Bool read_sequence(char s[], int seq_len) {
++++++++++++++++    char b;
++++++++++++++++    int i = 0;
++++++++++++++++
++++++++++++++++    printf("Enter a sequence of length %d: ", seq_len);
++++++++++++++++    // Read first character in to get us started
++++++++++++++++    scanf("%c", &b);
++++++++++++++++
++++++++++++++++    // Loop until new line 
++++++++++++++++    // FIXME: ADD your loop here
++++++++++++++++
++++++++++++++++
++++++++++++++++    // When we are done looping i should hold the length of valid bases read
++++++++++++++++    if (i != seq_len) {
++++++++++++++++      printf("Invalid: input sequence too short\n");
++++++++++++++++       return 0; // sequence too short
++++++++++++++++    }
++++++++++++++++    printf("Valid input sequence: ");
++++++++++++++++    print_sequence(s, seq_len);
++++++++++++++++    return 1;
++++++++++++++++}
++++++++++++++++
++++++++++++++++/****************************************************************************
++++++++++++++++ * Checks whether the input character represents a valid base.              *
++++++++++++++++ * Returns false if b is not in the bases array which is preloaded with     *
++++++++++++++++ *  'A', 'C', 'G', 'T'.                                                     *
++++++++++++++++ ****************************************************************************/
++++++++++++++++_Bool is_valid_base(char b) {
++++++++++++++++  // FIXME: Add a loop here that compares the input b to elements of the bases array
++++++++++++++++
++++++++++++++++
++++++++++++++++
++++++++++++++++  // if we got here then we must not have matched any of the bases elements
++++++++++++++++  return 0;
++++++++++++++++}
++++++++++++++++
++++++++++++++++/****************************************************************************
++++++++++++++++ *  This function will do the real work to try and match the two DNA        *
++++++++++++++++ *  sequences. In this case, the base sequence (variable s1) will be the    * 
++++++++++++++++ *  DNA sequence we are trying to reconstruct, and its length is stored in  *
++++++++++++++++ *  the variable len1. The target sequence (s2) will be the DNA sequence    * 
++++++++++++++++ *  that we are trying to match to the base sequence to determine if it is  *
++++++++++++++++ *  a part of that sequence, and its length is stored in len2.              *
++++++++++++++++ *                                                                          *
++++++++++++++++ *  This function needs to detect matches, and return whether or not a      *
++++++++++++++++ *  match was found. Additionally, this function needs to print out one of  *
++++++++++++++++ *  two possibilities, depending on if a match was found. If a match was    *
++++++++++++++++ *  found, the function needs to print out "A match was found" and then the *
++++++++++++++++ *  concatenated sequence. You can use the print_sequence_part function to  *
++++++++++++++++ *  help with printing out the concatenated sequence. If a match was not    *
++++++++++++++++ *  found, the function needs to print out "No match found".                *
++++++++++++++++ *                                                                          *
++++++++++++++++ *  There are two cases for matching that the function should check for.    *
++++++++++++++++ *  First is if the target sequence appears inside the base sequence        *
++++++++++++++++ *  itself.                                                                 *
++++++++++++++++ *  For example:                                                            *
++++++++++++++++ *                                                                          *
++++++++++++++++ *  Base: AAACTGGGT             =>  A match was found.                      *
++++++++++++++++ *  Target: ACTGG                   AAACTGGGT                               *
++++++++++++++++ *                                                                          *
++++++++++++++++ *  This would be a match because the target string ACTGG appears fully     *
++++++++++++++++ *  within the base seqeunce.                                               *
++++++++++++++++ *                                                                          *
++++++++++++++++ *  The other case is if the base sequence is a proper prefix to the target *
++++++++++++++++ *  string (the last bases of base sequence are the same as the first bases *
++++++++++++++++ *  of the target sequence) AND the length of the overlap is equal to or    *
++++++++++++++++ *  greater than the threshold. For example, assuming a threshold of 3:     *
++++++++++++++++ *                                                                          *
++++++++++++++++ *  Base: AAACTGGG              =>  A match was found.                      *
++++++++++++++++ *  Target:    GGGTC                AAACTGGGTC                              *
++++++++++++++++ *                                                                          *
++++++++++++++++ *  Base: AAACTGGG              =>  No match found.                         *
++++++++++++++++ *  Target:     GGACT                                                       *
++++++++++++++++ *                                                                          *
++++++++++++++++ *  The first example is a match because GGG is the last 3 bases of the     *
++++++++++++++++ *  base and the first 3 bases of the target. The second example is NOT a   *
++++++++++++++++ *  match because only 2 bases overlap.                                     *
++++++++++++++++ *                                                                          *
++++++++++++++++ *  One way to implement this is by lining up s2 at the end of s1 so that   *
++++++++++++++++ *  they have `threshold` bases overlap. If no valid match is found, slide  *
++++++++++++++++ *  s2 to left by one position. Repeat until either a match is found or no  *
++++++++++++++++ *  overlap >= threshold is possible anymore.                               *
++++++++++++++++ *                                                                          *
++++++++++++++++ *  Example:                                                                * 
++++++++++++++++ *  --------                                                                * 
++++++++++++++++ *  s1 = CCGTTACAGG, s2 = TACAG, threshold = 3                              * 
++++++++++++++++ *                                                                          * 
++++++++++++++++ *  CCGTTACAGG                                                              * 
++++++++++++++++ *         TACAG                                                            * 
++++++++++++++++ *                                                                          * 
++++++++++++++++ *  CCGTTACAGG                                                              * 
++++++++++++++++ *        TACAG                                                             * 
++++++++++++++++ *                                                                          * 
++++++++++++++++ *  CCGTTACAGG                                                              * 
++++++++++++++++ *       TACAG                                                              * 
++++++++++++++++ *                                                                          * 
++++++++++++++++ *  CCGTTACAGG                  =>  A match was found.                      *
++++++++++++++++ *      TACAG                       CCGTTACAGG                              *
++++++++++++++++ *                                                                          *
++++++++++++++++ *                                                                          *
++++++++++++++++ *  -----                                                                   *
++++++++++++++++ *  BONUS                                                                   *
++++++++++++++++ *  -----                                                                   *
++++++++++++++++ *  For bonus points, add functionality to detect matches where the target  *
++++++++++++++++ *  sequence is a proper prefix to the base sequence. For example:          *
++++++++++++++++ *                                                                          *
++++++++++++++++ *  Base:     AAACTGGG          =>  A match was found.                      *
++++++++++++++++ *  Target: GTAAA                   GTAAACTGGG                              *
++++++++++++++++ *                                                                          *
++++++++++++++++ *  This would be a match because because AAA is the last 3 bases of the    *
++++++++++++++++ *  target sequence and the first 3 bases of the base sequence.             *
++++++++++++++++ *                                                                          *
++++++++++++++++ ****************************************************************************/
++++++++++++++++_Bool match(const char s1[], const char s2[],
++++++++++++++++     int len1, int len2, int threshold) {
++++++++++++++++   // FIXME:  This is where the real work has to happen 
++++++++++++++++   //         implement this function using print_sequence_part as needed
++++++++++++++++
++++++++++++++++    printf("No match found.\n");
++++++++++++++++    return 0;
++++++++++++++++}
+++++++++++++++diff --git a/gitlog.txt b/gitlog.txt
+++++++++++++++new file mode 100644
+++++++++++++++index 0000000..e69de29
+++++++++++++++diff --git a/reference b/reference
+++++++++++++++new file mode 100755
+++++++++++++++index 0000000..1ff916b
+++++++++++++++Binary files /dev/null and b/reference differ
+++++++++++++++diff --git a/test.sh b/test.sh
+++++++++++++++new file mode 100755
+++++++++++++++index 0000000..cd2edd0
+++++++++++++++--- /dev/null
++++++++++++++++++ b/test.sh
+++++++++++++++@@ -0,0 +1,252 @@
++++++++++++++++#!/bin/bash
++++++++++++++++#set -x
++++++++++++++++
++++++++++++++++REFERENCE=./reference
++++++++++++++++PGM=./assignment-2
++++++++++++++++
++++++++++++++++# simple valid
++++++++++++++++BASE_SEQ1="AAAAAAAAAAAAAAAAAAAA"
++++++++++++++++TARGET_SEQ1="AAAAA"
++++++++++++++++
++++++++++++++++# VALID but has invalid characters that need to be ignored
++++++++++++++++BASE_SEQ2="aAAAaAAAaAAAaAAAaAAaAAaAaAaAaAaaaa"
++++++++++++++++TARGET_SEQ2="AAAAA"
++++++++++++++++
++++++++++++++++# BASE is invalid: too short
++++++++++++++++BASE_SEQ3="A"
++++++++++++++++TARGET_SEQ3="AAAAA"
++++++++++++++++
++++++++++++++++BASE_SEQ4="AAAAAAAAAAAAAAAAAAA"
++++++++++++++++TARGET_SEQ4="AAAAA"
++++++++++++++++
++++++++++++++++# base has invalid character
++++++++++++++++BASE_SEQ5="AAAAAAAAAAAAAAAAAAAB"
++++++++++++++++TARGET_SEQ5="AAAAA"
++++++++++++++++
++++++++++++++++# match, full overlap
++++++++++++++++BASE_SEQ6="GGGGGGGGAAAAAGGGGGGG"
++++++++++++++++TARGET_SEQ6="AAAAA"
++++++++++++++++
++++++++++++++++BASE_SEQ7="AAAAAGGGGGGGGGGGGGGG"
++++++++++++++++TARGET_SEQ7="AAAAA"
++++++++++++++++
++++++++++++++++BASE_SEQ8="GGGGGGGGGGGGGGGAAAAA"
++++++++++++++++TARGET_SEQ8="AAAAA"
++++++++++++++++
++++++++++++++++# no match
++++++++++++++++BASE_SEQ9="TTTTTTTTTTTTTTTTTTTT"
++++++++++++++++TARGET_SEQ9="AAAAA"
++++++++++++++++
++++++++++++++++BASE_SEQ10="ACGTACGTACGTACGTACGT"
++++++++++++++++TARGET_SEQ10="AAAAA"
++++++++++++++++
++++++++++++++++# target has invalid character, too short
++++++++++++++++BASE_SEQ11="ACGTACGTACGTACGTACGT"
++++++++++++++++TARGET_SEQ11="ACGTH"
++++++++++++++++
++++++++++++++++# match, either full overlap or target as suffix
++++++++++++++++BASE_SEQ12="ACGTACGTACGTACGTACGT"
++++++++++++++++TARGET_SEQ12="ACGTA"
++++++++++++++++
++++++++++++++++# match, target as suffix
++++++++++++++++BASE_SEQ13="ACGTACGTACGTACGTACGT"
++++++++++++++++TARGET_SEQ13="ACGTT"
++++++++++++++++
++++++++++++++++# match, target as suffix
++++++++++++++++BASE_SEQ14="ACGTTGCAACGTTGCAACGT"
++++++++++++++++TARGET_SEQ14="CGTAA"
++++++++++++++++
++++++++++++++++# no match
++++++++++++++++BASE_SEQ15="ACGTTGCAACGTTGCAACGT"
++++++++++++++++TARGET_SEQ15="GTCAA"
++++++++++++++++
++++++++++++++++# match, full overlap, extra characters ignored
++++++++++++++++BASE_SEQ16="ACGTACGTACGTACGTACGG"
++++++++++++++++TARGET_SEQ16="TACGGG"
++++++++++++++++
++++++++++++++++# target too short
++++++++++++++++BASE_SEQ17="AAAAAAAAAAAAAAAAAAAA"
++++++++++++++++TARGET_SEQ17="A"
++++++++++++++++
++++++++++++++++BASE_SEQ18="AAAAAAAAAAAAAAAAAAAA"
++++++++++++++++TARGET_SEQ18="AAAAB"
++++++++++++++++
++++++++++++++++BASE_SEQ19="AAAAAAAAAAAAAAAAAAAA"
++++++++++++++++TARGET_SEQ19="AaAaa"
++++++++++++++++
++++++++++++++++# empty base
++++++++++++++++BASE_SEQ20=""
++++++++++++++++TARGET_SEQ20="AAAAA"
++++++++++++++++
++++++++++++++++# empty target
++++++++++++++++BASE_SEQ21="AAAAAAAAAAAAAAAAAAAA"
++++++++++++++++TARGET_SEQ21=""
++++++++++++++++
++++++++++++++++## bonus
++++++++++++++++
++++++++++++++++# valid, target as prefix
++++++++++++++++BASE_BONUS1="ACGTTGCAACGTTGCAACGT"
++++++++++++++++TARGET_BONUS1="GGACG"
++++++++++++++++
++++++++++++++++# valid, target as prefix with ignored characters
++++++++++++++++BASE_BONUS2="AAGTACGTACGTACGTACGT"
++++++++++++++++TARGET_BONUS2="TAAAGT"
++++++++++++++++
++++++++++++++++# valid, target as prefix
++++++++++++++++BASE_BONUS3="ACGTACGTACGTACGTACGT"
++++++++++++++++TARGET_BONUS3="GACGT"
++++++++++++++++
++++++++++++++++# invalid, threshold larger than match
++++++++++++++++BASE_BONUS4="ACGTTGCAACGTTGCATTGG"
++++++++++++++++TARGET_BONUS4="TTTAC"
++++++++++++++++
++++++++++++++++# invalid, threshold larger than match after ignored characters
++++++++++++++++BASE_BONUS5="ACGTTGCAACGTTGCATTGG"
++++++++++++++++TARGET_BONUS5="TTTACG"
++++++++++++++++
++++++++++++++++function run_test()
++++++++++++++++{
++++++++++++++++   base=$1
++++++++++++++++   target=$2
++++++++++++++++   
++++++++++++++++   echo "Testing with BASE Sequence: $base and TARGET: $target"
++++++++++++++++   solution="$(echo -e "${base}\n${target}" | $REFERENCE)"
++++++++++++++++   answer="$(echo -e "${base}\n${target}" | $PGM)"
++++++++++++++++   if [[ "$answer" == "$solution" ]]; then
++++++++++++++++      echo "PASS"
++++++++++++++++      echo "$solution"
++++++++++++++++      return 0
++++++++++++++++   fi
++++++++++++++++   echo "FAIL: your program poduced: '$answer' output should have been: '$solution'"
++++++++++++++++   return 1
++++++++++++++++}
++++++++++++++++
++++++++++++++++total=0
++++++++++++++++correct=0
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ1 $TARGET_SEQ1; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ2 $TARGET_SEQ2; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ3 $TARGET_SEQ3; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ4 $TARGET_SEQ4; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ5 $TARGET_SEQ5; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ6 $TARGET_SEQ6; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ7 $TARGET_SEQ7; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ8 $TARGET_SEQ8; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ9 $TARGET_SEQ9; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ10 $TARGET_SEQ10; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ11 $TARGET_SE11; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ12 $TARGET_SEQ12; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ13 $TARGET_SEQ13; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ14 $TARGET_SEQ14; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ15 $TARGET_SEQ15; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ16 $TARGET_SEQ16; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ17 $TARGET_SEQ17; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ18 $TARGET_SEQ18; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ19 $TARGET_SEQ19; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ20 $TARGET_SEQ20; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_SEQ21 $TARGET_SEQ21; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++((total++))
++++++++++++++++
++++++++++++++++if run_test $BASE_BONUS1 $TARGET_BONUS1; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++
++++++++++++++++if run_test $BASE_BONUS2 $TARGET_BONUS2; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++
++++++++++++++++if run_test $BASE_BONUS3 $TARGET_BONUS3; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++
++++++++++++++++if run_test $BASE_BONUS4 $TARGET_BONUS4; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++
++++++++++++++++if run_test $BASE_BONUS5 $TARGET_BONUS5; then
++++++++++++++++  ((correct++))
++++++++++++++++fi
++++++++++++++++
++++++++++++++++echo "score: ${correct}/${total}"
++++++++++++++
+++++++++++++ commit 62346a9fe90f8489686f126132f8dade2a0973f9
+++++++++++++ Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
+++++++++++++ Date:   Wed Sep 16 14:48:55 2020 -0400
+++++++++++++
++++++++++++ commit 067b2df50f5796d0c2cccd345420cb4cf2c46aa3
++++++++++++ Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
++++++++++++ Date:   Wed Sep 16 16:26:06 2020 -0400
++++++++++++
+++++++++++ commit 7b5bb2222f9e4912ae8516fa1350b4258b179a5c
+++++++++++ Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
+++++++++++ Date:   Wed Sep 16 16:31:28 2020 -0400
+++++++++++
++++++++++ commit 727f0af7a07c63de2ffcdd4fdbaf5e9b8573705c
++++++++++ Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
++++++++++ Date:   Fri Sep 18 10:59:32 2020 -0400
++++++++++
+++++++++ commit 2d9c641bdffca050c06d7e45ecb481b6c74cfc02
+++++++++ Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
+++++++++ Date:   Fri Sep 18 16:17:10 2020 -0400
+++++++++
++++++++ commit f4ca6fc896cc7fd82eaeee36c933026944222fa3
++++++++ Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
++++++++ Date:   Fri Sep 18 17:53:56 2020 -0400
++++++++
+++++++ commit 904c90a4ffcdb2aa620fc58c17146257c822f5e2
+++++++ Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
+++++++ Date:   Fri Sep 18 17:57:24 2020 -0400
+++++++
++++++ commit c40c56af101a555dcf52f8d04cfdf39f6aff31c7
++++++ Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
++++++ Date:   Fri Sep 18 19:28:48 2020 -0400
++++++
+++++ commit 0f42f172a611a29af26621616176f7fae70815f0
+++++ Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
+++++ Date:   Fri Sep 18 19:56:59 2020 -0400
+++++
++++ commit 3c44c2a4ba6f9452e602374b66ddf92a43f0c9e0
++++ Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
++++ Date:   Fri Sep 18 20:29:05 2020 -0400
++++
+++ commit b2abe3371a674cf3b8c0f0c2d1bb7b9dafef2a15
+++ Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
+++ Date:   Sat Sep 19 17:44:08 2020 -0400
+++
++ commit ad8de7660f7ae9e57a4ae4795bfb821473046643
++ Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
++ Date:   Sat Sep 19 19:00:10 2020 -0400
++
+ commit 36ef3132f54b029445f43f81fd59521ed73d38a7
+ Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
+ Date:   Sat Sep 19 20:22:45 2020 -0400
+
 commit 806dd1a6b9b3ba234e4f790681f5c2c308b9760e
 Author: Griffin Heyrich <gheyrich@csa1.bu.edu>
 Date:   Sat Sep 19 21:17:57 2020 -0400

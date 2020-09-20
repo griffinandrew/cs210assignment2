@@ -303,7 +303,7 @@ _Bool match(const char s1[], const char s2[],
               print_sequence_part(s1,0,17); print_sequence_part(s2,0,5);
             }
             else if ( i == 16) {
-              print_sequence_part(s1,0,16); print_sequence_part(s2,3,5);
+              print_sequence_part(s1,0,16); print_sequence_part(s2,0,5);
             }
             else{
               print_sequence(s1,len1);
