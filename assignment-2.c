@@ -47,22 +47,20 @@ const char bases[] = {'A', 'T', 'C', 'G'};
 int main() {
     char s1[20], s2[5];
 
-
-    
     // 1: Read base input sequence into s1 array
     if(read_sequence(s1,BASE_SEQ_LEN) == 0) {
       // if read_sequence returned false then there was an error
       printf("ERROR: sequence 1 is bad.  Exiting\n");
       return -1;
     }
-    if(read_sequence(s2,TARGET_SEQ_LEN) == 0){
+    if(read_sequence(s2,TARGET_SEQ_LEN) == 0){ //return error if s2 is invalid input
       printf("ERROR: sequence 2 is bad.  Exiting\n");
       return -1;
     }
-    if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 1){
+    if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 1){ //match found and succesfully displayed by match
       return 0;
     }
-    if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 0) {
+    if (match(s1,s2,BASE_SEQ_LEN,TARGET_SEQ_LEN, THRESHOLD) == 0) { //no match found and succesfully displayed
       printf("No match found.\n");
       return 0;
     }
@@ -116,17 +114,13 @@ _Bool read_sequence(char s[], int seq_len) {
     // Read first character in to get us started
     scanf("%c", &b);
 
-
    while(b != '\n'){
-      if ((i < seq_len) && (is_valid_base(b) == 1)) { //while b is valid base sequence and noyt all bases have been checked verify that b is in fact a base and add it to appropriate array
+      if ((i < seq_len) && (is_valid_base(b) == 1)) { //while b is valid base sequence and not all bases have been checked verify that b is in fact a base and add it to appropriate array
         s[i] = b;
         i++;
       }
       scanf("%c", &b); //take in next b
     }
-    
-
-    
     // When we are done looping i should hold the length of valid bases read
     if(i != seq_len) { //if the array is not the proper length it is wrong
       printf("Invalid: input sequence too short\n");
